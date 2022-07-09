@@ -1,24 +1,57 @@
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import { useAddress, useMetamask } from "@thirdweb-dev/react";
+import Home from "./Page/Home";
+import { ToastContainer, toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
+  const connectMetaMast = useMetamask();
+  const address = useAddress();
+  const notify = () =>
+    toast.error("Logged Out!", {
+      position: "bottom-right",
+      autoClose: 1000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
+
+  const Auth = () => {
+    return (
+      <div className="App flex justify-center items-center h-screen w-screen" onLoad={notify()}>
+        <button
+          onClick={connectMetaMast}
+          className="bg-purple-500 h-16 w-32 rounded-lg animate-bounce hover:bg-purple-400"
         >
-          Learn React
-        </a>
-      </header>
-    </div>
+          Click To Connect
+        </button>
+        <ToastContainer
+            position="bottom-right"
+            autoClose={1000}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+          />
+      </div>
+    );
+  };
+
+  return (
+    <>
+      {address ? (
+        <div>
+          <Home />
+        </div>
+      ) : (
+        Auth()
+      )}
+    </>
   );
 }
 
