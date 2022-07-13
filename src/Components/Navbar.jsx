@@ -2,9 +2,24 @@ import React from "react";
 import { useDisconnect, useAddress } from "@thirdweb-dev/react";
 import { ToastContainer, toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
+import { ethers } from "ethers";
 
 const Navbar = () => {
   const address = useAddress()
+  const getbalance = (address) => {
+    var value=0
+    window.ethereum
+      .request({ 
+        method: "eth_getBalance", 
+        params: [address, "latest"] 
+      })
+      .then((balance) => {
+        value = ethers.utils.formatEther(balance)
+      });
+      return value
+  };
+  const balance = getbalance(address)
+  
   const notify = (msg) =>
     toast.info(msg, {
       position: "bottom-right",
@@ -17,12 +32,12 @@ const Navbar = () => {
     });
   return (
     <>
-      <div className="social flex items-center justify-end my-10 space-x-10">
+      <div className="social flex items-center justify-end my-10 space-x-10" onLoad={getbalance(address)}>
         <button
           title="balance"
           className="transform transition-all hover:scale-110"
           onClick={() => {
-            notify("Balance")
+            notify("Balance="+balance)
           }}
         >
           <svg
