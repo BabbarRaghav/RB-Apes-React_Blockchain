@@ -1,4 +1,5 @@
 import React from "react";
+import { AiOutlineHeart } from "react-icons/ai";
 
 const Collection = (props) => {
   return (
@@ -28,6 +29,12 @@ const Collection = (props) => {
         </svg>
         {props.list.buyoutCurrencyValuePerToken.displayValue}
       </p>
+      <div className="flex items-center justify-end space-x-2">
+        <AiOutlineHeart className="h-3 w-3 text-gray-500 dark:text-gray-400" />
+        <div className="text-xs text-gray-800 dark:text-gray-400">
+          {props.list.asset?.stats?.favorites ?? 0}
+        </div>
+      </div>
     </div>
   );
 };

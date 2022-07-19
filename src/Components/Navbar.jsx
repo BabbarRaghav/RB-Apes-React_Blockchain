@@ -1,25 +1,33 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useDisconnect, useAddress } from "@thirdweb-dev/react";
 import { ToastContainer, toast } from "react-toastify";
-import 'react-toastify/dist/ReactToastify.css';
+import "react-toastify/dist/ReactToastify.css";
 import { ethers } from "ethers";
+import { useNavigate } from "react-router-dom";
 
-const Navbar = () => {
-  const address = useAddress()
-  const getbalance = (address) => {
-    var value=0
+const Navbar = (props) => {
+  const address = useAddress();
+  const disconnect = useDisconnect();
+  const navigate = useNavigate()
+  const [actions, setActions] = useState({
+    balance: 0,
+    action: ""
+  });
+  useEffect(() => {
     window.ethereum
-      .request({ 
-        method: "eth_getBalance", 
-        params: [address, "latest"] 
+      .request({
+        method: "eth_getBalance",
+        params: [address, "latest"],
       })
       .then((balance) => {
-        value = ethers.utils.formatEther(balance)
+        setActions({
+          balance:ethers.utils.formatEther(balance),
+          action: props.action
+        });
       });
-      return value
-  };
-  const balance = getbalance(address)
-  
+    // eslint-disable-next-line
+  });
+
   const notify = (msg) =>
     toast.info(msg, {
       position: "bottom-right",
@@ -32,12 +40,14 @@ const Navbar = () => {
     });
   return (
     <>
-      <div className="social flex items-center justify-end my-10 space-x-10" onLoad={getbalance(address)}>
+      <div
+        className="social flex items-center justify-end my-10 space-x-10"
+      >
         <button
           title="balance"
           className="transform transition-all hover:scale-110"
           onClick={() => {
-            notify("Balance="+balance)
+            notify("Balance=" + actions.balance);
           }}
         >
           <svg
@@ -55,7 +65,7 @@ const Navbar = () => {
           title="account"
           className="transform transition-all hover:scale-110"
           onClick={() => {
-            notify("Your Account is "+address)
+            notify("Your Account is " + address);
           }}
         >
           <svg
@@ -74,23 +84,40 @@ const Navbar = () => {
           </svg>
         </button>
         <button
-          type="button"
-          className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm"
-          onClick={useDisconnect()}
-        >
-          Logout
-        </button>
+            type="button"
+            className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-green-600 text-base font-medium text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 sm:ml-3 sm:w-auto sm:text-sm"
+            onClick={()=>{return navigate('/dashboard')}}
+          >
+            Dashboard
+          </button>
+        {actions.action === "Logout" ? (
+          <button
+            type="button"
+            className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm"
+            onClick={disconnect}
+          >
+            {actions.action}
+          </button>
+        ) : (
+          <button
+            type="button"
+            className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm"
+            onClick={()=>{return navigate('/')}}
+          >
+            {actions.action}
+          </button>
+        )}
         <ToastContainer
-            position="bottom-right"
-            autoClose={1000}
-            hideProgressBar={false}
-            newestOnTop={false}
-            closeOnClick
-            rtl={false}
-            pauseOnFocusLoss
-            draggable
-            pauseOnHover
-          />
+          position="bottom-right"
+          autoClose={1000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+        />
       </div>
     </>
   );

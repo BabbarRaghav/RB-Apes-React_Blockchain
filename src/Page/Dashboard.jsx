@@ -1,18 +1,18 @@
 import React from 'react'
 import Banner from '../Components/Banner';
-import CollectionInfo from '../Components/CollectionInfo';
+import DashList from '../Components/DashList';
 import Details from '../Components/Details';
 import Navbar from '../Components/Navbar';
 
-const CollectionPage = (props) => {
+const Dashboard = () => {
   return (
     <>
     <Banner/>
     <Details/>
     <Navbar action="Go Back"/>
-    <CollectionInfo/>
+    <DashList/>
     </>
   )
 }
 
-export default CollectionPage
+export default Dashboard

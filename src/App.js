@@ -5,6 +5,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import CollectionPage from "./Page/CollectionPage";
+import Dashboard from "./Page/Dashboard";
 
 function App() {
   const connectMetaMast = useMetamask();
@@ -53,6 +54,7 @@ function App() {
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/asset/:contractAddress/:id" element={<CollectionPage/>} />
+              <Route path="/dashboard" element={<Dashboard/>} />
             </Routes>
           </Router>
         </div>

@@ -8,7 +8,7 @@ const Banner = () => {
         <div className="relative z-20 top-56 px-5 flex justify-center">
             <img src={Logo} alt="" className="h-40 w-30 rounded-full" />
         </div>
-        <div className="absolute z-10 inset-0">
+        <div className="absolute z-10 inset-0 h-10">
             <img src={back} alt="" className="w-full h-80" />
         </div>
     </div>
