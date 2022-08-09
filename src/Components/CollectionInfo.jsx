@@ -10,11 +10,20 @@ import {
 } from "react-icons/ai";
 import NFTBasicInfo from "./NFTBasicInfo";
 import NFTDetails from "./NFTDetails";
-// import { useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
 
 const CollectionInfo = () => {
   const params = useParams();
-  // const navigate = useNavigate();
+  const notify = (data) =>
+    toast.success(data, {
+      position: "bottom-right",
+      autoClose: 1000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
   const marketPlace = useMarketplace(
     "0xDCc3b26792FCa245b75F0802477dA53CF80c38f3"
   );
@@ -27,7 +36,7 @@ const CollectionInfo = () => {
       const listing = await marketPlace.getListing(BigNumber.from(params.id));
       setList(listing);
       setLoading(false);
-      console.log(list)
+      console.log(list);
     } catch (error) {
       console.log(error);
     }
@@ -36,6 +45,7 @@ const CollectionInfo = () => {
   const buyNFT = async () => {
     try {
       await marketPlace.buyoutListing(params.id, 1);
+      notify("Successfully Buy");
     } catch (error) {
       console.log(error);
     }
@@ -53,7 +63,7 @@ const CollectionInfo = () => {
     leftElement: `hidden lg:block`,
     rightContainer: `flex flex-1 flex-col space-y-4`,
     buyoutContainer: `flex-1`,
-  }
+  };
 
   return (
     <>
@@ -69,9 +79,9 @@ const CollectionInfo = () => {
             <span className="sr-only">Loading...</span>
           </div>
         ) : (
-          <div className = {style.nftContainer}>
-            <div className = {style.leftContainer}>
-              <div className = {style.leftElement}>
+          <div className={style.nftContainer}>
+            <div className={style.leftContainer}>
+              <div className={style.leftElement}>
                 <div className="flex items-center justify-between p-4">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -98,8 +108,11 @@ const CollectionInfo = () => {
                   />
                 </div>
               </div>
-              <div className = {style.leftElement}>
-                <NFTDetails description={list?.asset?.description} property={list?.asset?.attributes}/>
+              <div className={style.leftElement}>
+                <NFTDetails
+                  description={list?.asset?.description}
+                  property={list?.asset?.attributes}
+                />
               </div>
             </div>
             <div className={style.rightContainer}>
@@ -158,6 +171,17 @@ const CollectionInfo = () => {
             </div>
           </div>
         )}
+        <ToastContainer
+          position="bottom-right"
+          autoClose={1000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+        />
       </div>
     </>
   );
